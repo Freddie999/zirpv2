@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Nearby Towns</title>
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+        
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+        <!-- Set map height -->
+        <style>
+            #mapid { height: 785px; }
+        </style>
+    </head>
+<body>
+    <h1>Nearby Towns</h1>
+    {% if towns %}
+    <ul>
+    {% for town in towns %}
+        <li>
+        {{ town.name }}: {{town.distance}}
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    <!-- map div -->
+    <div id="mapid"></div>
+    <!-- map js -->
+    <script>
+        var map = L.map('mapid').setView([6.078859, -0.467170], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([6.078859, -0.467170]).addTo(map)
+            .bindPopup('My Zip.<br> Last known location.')
+            .openPopup();
+
+    </script>
+</body>
+</html>
