@@ -1,0 +1,5 @@
+django
+folium
+#geocoder depends on gdal, which is difficult to install
+geocoder
+
