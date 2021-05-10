@@ -55,9 +55,10 @@ def index(request):
     print(f"checking distance from {lat} {lng}")
    
     #plot near towns to map
-    town_location_dict = find_closest_town(lat, lng)
-    for town in town_location_dict.items():
-        folium.CircleMarker(location=town[1], popup=town[0], tooltip='nearby town',
+    closest_towns = find_closest_town(lat, lng)
+    for town in closest_towns:
+        print(town)
+        folium.CircleMarker(location=town['coordinates'], popup=town['name'], tooltip='nearby town',
         color='#dc143c', radius=2, weight=10
         ).add_to(m)   
 
@@ -94,11 +95,10 @@ def find_closest_town(lat, lng):
     for t in all_towns:
         distance = t.location.distance(zip_location)
         if distance < minimum_distance:
-            min_distance_towns_list.append((t.name,(t.location.y, t.location.x)))
+            town_dict = {'name': t.name, 'coordinates':(t.location.y, t.location.x), 'distance': distance}
+            min_distance_towns_list.append(town_dict)
             minimum_distance = distance
-            closest_town = t
     new_min_dist_towns = min_distance_towns_list[-4:]
-    town_loc_dict = dict(new_min_dist_towns)
-    return town_loc_dict
+    return new_min_dist_towns 
 
 
