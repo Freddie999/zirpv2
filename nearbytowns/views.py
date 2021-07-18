@@ -12,6 +12,10 @@ import geocoder
 import openrouteservice as ors
 from openrouteservice import convert
 import json
+from ipywidgets import *
+from ipyleaflet import *
+
+
 
 ors_key='5b3ce3597851110001cf62486fee7a4bdc5944aab2195992d4675ab0'
 
@@ -36,8 +40,16 @@ def index(request):
         return HttpResponse('Your address/coordinates input is invalid')
 
     #create a map object
-    m = folium.Map(width=1450,height=700,location=[lat, lng], zoom_start=12, control_scale=True, flyTo=True)
+    m = folium.Map(width=1450,height=720,location=[lat, lng], zoom_start=12, control_scale=True, flyTo=True)
     
+    #get user location
+    a = plugins.LocateControl(position='bottomright', flyTo=True,
+                                    compassClass='CompassMarker',
+                                    showCompass=True,
+                                    returnToPrevBounds=True,
+                                    strings={'title': 'get your current location','popup': 'Your position'})
+    a.add_to(m)
+   
 
     print(f"checking distance from {lat} {lng}")
    
@@ -122,26 +134,28 @@ def index(request):
         filename='ir_draw_export.geojson'
         )
     draw.add_to(m)
-    print(dir(draw))
+    #print(draw.last_action)
 
-    #get user location
-    a = plugins.LocateControl(position='bottomright', flyTo=True,
-                                    compassClass='CompassMarker',
-                                    showCompass=True,
-                                    returnToPrevBounds=True,
-                                    strings={'title': 'get your current location','popup': 'Your position'})
-    a.add_to(m)
+    slider = FloatSlider(
+    value=7.5,
+    min=5.0,
+    max=10.0,
+    step=0.1,
+    description='Input:',
+)
 
 
     #get html representation of map object
     m = m._repr_html_()
     context = {
-        'm' : m,
+        
         'form' : form,
         'closest_town_name' : town,
+        'm' : m,
     }
     #template_name = 'towns/index.html'
     return render(request, 'towns/index.html', context)
+
 
 
 def find_closest_town(lat, lng):
