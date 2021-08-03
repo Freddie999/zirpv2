@@ -136,7 +136,6 @@ def index(request):
     # add a draw tool
     draw = plugins.Draw(export=True, filename="ir_draw_export.geojson")
     draw.add_to(m)
-    print(dir(draw))
 
     # get user location
     a = plugins.LocateControl(
@@ -188,3 +187,4 @@ nest_coordinates = {
     "rw1": [-1.939998, 30.508413],
     "rw2": [-2.0796258, 29.7801251],
 }
+# fix routing
